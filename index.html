@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#efecdf"><meta name="description" content="拾穗，一本留給此刻的解答之書。"><title>拾穗｜留一頁，給此刻</title><link rel="icon" href="wheat.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><script defer src="engine.js"></script><script defer src="app.js"></script></head>
+<body>
+<header><a class="brand" href="#read" aria-label="拾穗首頁"><img src="wheat.svg" alt="" width="29" height="42"><span>拾穗<small>A LITTLE BOOK OF PAUSES</small></span></a><span class="edition">互動測試版</span></header>
+<nav aria-label="主要導覽"><a href="#read" id="nav-read" aria-current="page">翻一頁</a><a href="#saved" id="nav-saved">我的拾穗 <span id="saved-count">0</span></a></nav>
+<main id="main">
+<section id="read-view" aria-labelledby="intro-title">
+<div class="intro"><span class="eyebrow">把心事，交給一陣風</span><h1 id="intro-title">留一頁，給此刻。</h1><p>在心裡默念你的問題，<br>不急著想通，先翻開看看。</p></div>
+<div id="load-error" class="notice" role="alert" hidden><p id="error-text"></p><button id="retry" class="text-button">重新讀取答案</button></div>
+<div class="book-stage">
+<button id="book" class="book" aria-label="翻開拾穗，隨機閱讀一頁" disabled><span class="cover"><span class="book-top">一 本 解 答 之 書</span><span class="book-title">拾穗</span><img src="wheat.svg" class="cover-wheat" alt=""><span class="book-rule"></span><span class="book-sub">在日常的縫隙裡<br>拾起一點光</span><span class="book-bottom">SHI SUI · A MOMENT FOR YOU</span></span><span class="ribbon" aria-hidden="true"></span></button>
+<article id="page" class="page" hidden aria-labelledby="answer"><div class="page-top"><span>拾穗 · 此刻的一頁</span><span id="page-number"></span></div><div class="answer-body"><img src="wheat.svg" alt="" class="page-wheat"><h2 id="answer" tabindex="-1"></h2><p class="whisper">先讀這一句，也留意心裡的回聲。</p></div><button id="expand" class="expand" aria-expanded="false" aria-controls="reflection">展開哲理 <span aria-hidden="true">＋</span></button><div id="reflection" class="reflection" hidden></div><div class="page-actions"><button id="favorite" class="save-button" aria-pressed="false">收藏這一頁</button><button id="again" class="primary">再次翻頁 <span aria-hidden="true">↗</span></button></div><span class="page-fold" aria-hidden="true"></span></article>
+</div><p id="book-hint" class="hint">正在整理書頁…</p><p class="sample-label">試閱內容 · <span id="data-count">—</span> 則原創答案<br><small>完整答案庫 · 匯入驗證版</small></p>
+</section>
+<section id="saved-view" hidden aria-labelledby="saved-title"><div class="intro"><span class="eyebrow">那些想留下的話</span><h1 id="saved-title" tabindex="-1">我的拾穗</h1><p>有些句子，值得再讀一次。</p></div><p class="storage-note">收藏只存在這個瀏覽器；清除網站資料會使收藏遺失。<br>收藏會保留當時的文字，不隨答案庫更新而改寫。</p><div id="saved-list"></div></section>
+</main>
+<footer><span class="footer-grain" aria-hidden="true">✧</span><p>文字是思考的邀請，答案仍在你的生活裡。</p><small>拾穗 · 原創解答之書 · 測試版</small></footer>
+<div id="status" class="toast" role="status" aria-live="polite"></div><noscript>請啟用 JavaScript，才能翻頁與使用本機收藏。</noscript>
+</body></html>

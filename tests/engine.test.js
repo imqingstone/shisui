@@ -1,0 +1,27 @@
+const assert=require('node:assert/strict');
+const {validateAnswers,randomIndex,pick,validateSaved,toggleSaved}=require('../engine');
+const rows=validateAnswers(require('../answers.json'));
+assert.equal(rows.length,333);
+for(const bad of [null,{},[],[{id:'a',answer:' ',reflection:'x'}],[{id:'a',answer:'x'}],[{id:true,answer:'x',reflection:'y'}],[rows[0],rows[0]]])assert.throws(()=>validateAnswers(bad));
+assert.equal(validateAnswers([{id:42,answer:' A ',reflection:' B '}])[0].id,'42');
+assert.throws(()=>validateAnswers([{id:42,answer:'a',reflection:'b'},{id:'42',answer:'a',reflection:'b'}]));
+for(let i=0;i<rows.length;i++)assert.equal(pick(rows,null,()=>i).id,rows[i].id);
+for(const previous of rows)for(let i=0;i<rows.length-1;i++)assert.notEqual(pick(rows,previous.id,()=>i).id,previous.id);
+assert.equal(pick([rows[0]],rows[0].id,()=>0).id,rows[0].id);
+assert.throws(()=>pick([]));
+let source=[4294967295,2];assert.equal(randomIndex(3,()=>source.shift()),2);assert.equal(source.length,0);
+assert.throws(()=>randomIndex(0));assert.throws(()=>randomIndex(3,()=>-1));
+let prev,seen=new Set();for(let i=0;i<10000;i++){const r=pick(rows,prev);assert.notEqual(r.id,prev);assert.ok(rows.some(x=>x.id===r.id));prev=r.id;seen.add(prev)}assert.equal(seen.size,333);
+const date='2026-11-10T00:00:00.000Z';let saved=toggleSaved([],rows[0],date);assert.equal(saved.length,1);assert.equal(toggleSaved(saved,rows[0],date).length,0);
+assert.deepEqual(validateSaved(JSON.parse(JSON.stringify({version:1,items:saved}))),{version:1,items:saved});
+assert.throws(()=>validateSaved({version:2,items:[]}));assert.throws(()=>validateSaved({version:1,items:[{...rows[0],savedAt:'bad'}]}));
+const changed=rows.map(r=>({...r,answer:'新版內容'}));assert.notEqual(saved[0].answer,changed[0].answer);
+console.log('PASS: JSON validation, numeric IDs, unique IDs, all candidates reachable, unbiased rejection, 10,000 draws without consecutive duplicates, single answer, empty data, favorites toggle, snapshot preservation, persistence schema.');
+
+const old=require('./legacy-answers.json');
+let mixed=old.map(row=>({...row,savedAt:date}));
+for(const row of rows)mixed=toggleSaved(mixed,row,date);
+assert.equal(mixed.length,341);assert.equal(validateSaved({version:1,items:mixed}).items.length,341);
+for(const row of old)assert.deepEqual(mixed.find(x=>x.id===row.id),{...row,savedAt:date});
+for(const row of old)mixed=toggleSaved(mixed,row,date);assert.equal(mixed.length,333);
+console.log('PASS: 333 answers, 110,556 previous/current pairs, all 341 old/new favorites, old snapshot text preserved and removable.');
