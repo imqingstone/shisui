@@ -5,7 +5,7 @@ function notify(text){$('#status').textContent=text;clearTimeout(noticeTimer);no
 try{const raw=localStorage.getItem(KEY);if(raw)saved=Shisui.validateSaved(JSON.parse(raw)).items}catch{storageOK=false;notify('無法讀取收藏，原資料未覆寫。本次收藏僅暫存，關閉頁面後會遺失。')}
 function persist(next){saved=next;if(storageOK){try{localStorage.setItem(KEY,JSON.stringify({version:1,items:saved}))}catch{storageOK=false}}if(!storageOK)notify('無法儲存到瀏覽器；本次收藏僅暫存，關閉頁面後會遺失。');syncCount()}
 function syncCount(){$('#saved-count').textContent=saved.length}
-function syncFavorite(){const active=current&&saved.some(row=>row.id===current.id);$('#favorite').setAttribute('aria-pressed',String(!!active));$('#favorite').textContent=active?'已收藏 · 點此取消':'收藏這一頁'}
+function syncFavorite(){const active=current&&saved.some(row=>row.id===current.id);$('#favorite').setAttribute('aria-pressed',String(!!active));$('#favorite').setAttribute('aria-label',active?'已收藏，點擊取消收藏':'收藏這一頁');$('#favorite').textContent=active?'已收藏 ✓':'收藏這一頁'}
 function collapse(){$('#reflection').hidden=true;$('#expand').setAttribute('aria-expanded','false');$('#expand').replaceChildren(document.createTextNode('展開哲理 '),sign('＋'))}
 function sign(s){const span=document.createElement('span');span.textContent=s;span.setAttribute('aria-hidden','true');return span}
 function display(row,animate=false){
