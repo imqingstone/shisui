@@ -14,7 +14,7 @@ function display(row,animate=false){
  collapse();syncFavorite();$('#book').hidden=true;$('#page').hidden=false;$('#book-hint').textContent='想換個角度，就再翻一頁。';$('#again').disabled=!answers.length;$('#answer').focus({preventScroll:true});
  if(animate){$('#page').classList.remove('turning');void $('#page').offsetWidth;$('#page').classList.add('turning')}
 }
-function draw(){if(busy||!answers.length)return;busy=true;display(Shisui.pick(answers,current?.id),true);$('#again').disabled=true;setTimeout(()=>{busy=false;$('#page').classList.remove('turning');$('#again').disabled=!answers.length},matchMedia('(prefers-reduced-motion: reduce)').matches?0:470)}
+function draw(){if(busy||!answers.length)return;busy=true;useCount();display(Shisui.pick(answers,current?.id),true);$('#again').disabled=true;setTimeout(()=>{busy=false;$('#page').classList.remove('turning');$('#again').disabled=!answers.length},matchMedia('(prefers-reduced-motion: reduce)').matches?0:470)}
 function renderSaved(){
  const list=$('#saved-list');list.replaceChildren();
  if(!saved.length){const box=document.createElement('div');box.className='empty';const img=document.createElement('img');img.src='wheat.svg';img.alt='';const p=document.createElement('p');p.textContent='還沒有收藏。遇見喜歡的句子，就把它留下。';const a=document.createElement('a');a.href='#read';a.textContent='去翻一頁 →';box.append(img,p,a);list.append(box);return}
@@ -34,3 +34,8 @@ $('#favorite').addEventListener('click',()=>{if(!current)return;const was=saved.
 window.addEventListener('hashchange',route);
 window.addEventListener('storage',e=>{if(e.key===KEY){try{saved=e.newValue?Shisui.validateSaved(JSON.parse(e.newValue)).items:[];syncCount();syncFavorite();if(location.hash==='#saved')renderSaved()}catch{notify('其他分頁的收藏無法讀取；目前畫面保留原紀錄。')}}});
 syncCount();route();load();
+
+// 使用次數：每次使用記一筆到 GoatCounter，並在頁尾顯示累計次數（只記次數，不送出任何輸入內容）。
+const usagePath='shisui-draw';
+function useCount(){try{const g=window.goatcounter;if(g&&g.count)g.count({path:usagePath,title:'拾穗抽答案',event:true,no_session:true})}catch(e){}}
+fetch('https://imqingstone.goatcounter.com/counter/'+usagePath+'.json').then(r=>r.ok?r.json():null).then(d=>{const el=document.getElementById('usage');if(el&&d&&d.count){el.textContent='已有 '+d.count+' 次，在這裡拾起答案';el.hidden=false}}).catch(()=>{});
